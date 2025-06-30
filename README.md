@@ -3,10 +3,30 @@ An AI/ML project to convert handwritten mathematical expressions into LaTeX code
 
 ## Project Overview
 
-This project implements a three-stage approach for handwritten math recognition:
-1. **File Type Conversion**: Alteration of .inkml file architecture from CROHME data into .png formats for easier reading.
-2. **Symbol Detection**: CNN-based detection and segmentation of individual mathematical symbols.
-3. **Structure Recognition**: Reconstruction of LaTeX expressions from detected symbols and their spatial relationships.
+**Textract** converts raw CROHME-2023 inkml data into rendered images, then experiments with multiple neural-sequence architectures to translate those images into LaTeX code. First,  all `.inkml` stroke files were converted into `.png` bitmaps. Next, a unified PyTorch dataset was built that tokenizes every LaTeX annotation, pads sequences, and applies standard image transforms. Finally, the four encoder–decoder variants were compared with each other:
+
+1. **CNN–GRU Baseline**: A small three-layer convolutional feature extractor whose pooled output is added to token embeddings and fed into a single-layer GRU.  
+2. **ResNet34 + LSTM + Attention**: A pretrained ResNet34 backbone projected into a 256-dim feature map, with a two-layer LSTM and additive attention over its spatial grid.  
+3. **Large LSTM**: Same as above but with a 512-dim feature projection and three LSTM layers (uses the pretrained ResNet34 backbone).  
+4. **Transformer Decoder**: Replaces the LSTM with a three-layer Transformer decoder (8 heads, 1024-dim feed-forward) on top of the 256-dim ResNet34 features, using both image and token positional encodings for fully self-attention-driven generation.
+
+All variants are trained with Adam, gradient clipping, LR reduction on plateau, and early stopping. This repo contains scripts for preprocessing, training, inference (greedy or beam search), and visualization of attention and TensorBoard curves.
+
+## Project Demo
+
+Click the thumbnail below to watch a short demo of TextRact in action:
+
+[![Textract Demo](https://img.youtube.com/vi/kF_Qodtkdns/0.jpg)](https://youtu.be/kF_Qodtkdns)
+
+## Results
+![Training Loss Over Time](images/trainingLoss.png)  
+*Figure 1: Training loss curves showing the same ordering: CNN–GRU settles near 1.4, standard LSTM near 1.1, Large LSTM dips to 0.8, and Transformer reaches ~0.85.*
+
+![Validation Accuracy Over Time](images/modelAccuracy.png)  
+*Figure 2: Validation accuracy curves for all four models. The Large LSTM peaks at ~0.77, while the Transformer variant converges smoothly to ~0.75.*
+
+![Model Configurations](images/modelsTable.png)  
+*Table 1: Summary of model hyperparameters: encoder/decoder dimensions, number of layers, batch size, and pretrained backbone usage.*
 
 ## Project Structure
 
