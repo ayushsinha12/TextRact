@@ -12,6 +12,14 @@ An AI/ML project to convert handwritten mathematical expressions into LaTeX code
 
 All variants are trained with Adam, gradient clipping, LR reduction on plateau, and early stopping. This repo contains scripts for preprocessing, training, inference (greedy or beam search), and visualization of attention and TensorBoard curves.
 
+### Tech Stack
+- **Python** → core language  
+- **PyTorch / Torchvision** → modeling & training  
+- **PIL / Pillow**, **NumPy**, **pandas** → data loading & manipulation  
+- **TensorBoard**, **NLTK** → evaluation & logging  
+- **Matplotlib**, **torchsummary**, **tqdm** → visualization & progress feedback  
+- **argparse**, **os/pathlib**, **JSON** → configuration
+
 ## Project Demo
 
 Click the thumbnail below to watch a short demo of TextRact in action:
