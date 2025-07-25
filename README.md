@@ -1,4 +1,4 @@
-# Textract
+# TextRact
 An AI/ML project to convert handwritten mathematical expressions into LaTeX code using the CROHME 2023 dataset.
 
 ## Project Overview
